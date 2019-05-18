@@ -5,7 +5,8 @@
   "description": "Core packages and dependencies",
   "main": "index.js",
   "scripts": {
-    "build": "yarn wsrun build"
+    "build": "yarn wsrun build",
+    "build:clean": "yarn wsrun build:clean && yarn wsrun build"
   },
   "keywords": [
     "artistware",
