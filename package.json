@@ -1,0 +1,22 @@
+{
+  "name": "core",
+  "private": true,
+  "version": "0.0.1-beta",
+  "description": "Core packages and dependencies",
+  "main": "index.js",
+  "scripts": {
+    "build": "yarn wsrun build"
+  },
+  "keywords": [
+    "artistware",
+    "cms"
+  ],
+  "workspaces": [
+    "packages/*"
+  ],
+  "author": "Brandon Morrison <brandon@brandonam.com> (http://brandonam.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "wsrun": "^3.6.5"
+  }
+}
