@@ -1,12 +1,26 @@
 {
-    "compilerOptions": {
-       "lib": ["es2017"],
-       "target": "es2017",
-       "module": "commonjs",
-       "moduleResolution": "node",
-       "outDir": "./build",
-       "emitDecoratorMetadata": true,
-       "experimentalDecorators": true,
-       "sourceMap": false
-    }
- }
+  "compilerOptions": {
+     "lib": ["es2017"],
+     "target": "es2017",
+     "module": "commonjs",
+     "moduleResolution": "node",
+     "outDir": "./build",
+     "emitDecoratorMetadata": true,
+     "experimentalDecorators": true,
+     "sourceMap": true,
+     "composite": true,
+     "declaration": true,
+     "declarationMap": true,
+     "resolveJsonModule": true
+  },
+  "exclude": [
+    "../../node_modules",
+    "build",
+    "./tsconfig.tsbuildinfo",
+    "src/**/*.spec.ts"
+  ],
+  "include": [
+    "ormconfig.json",
+    "src/**/*.ts"
+  ]
+}

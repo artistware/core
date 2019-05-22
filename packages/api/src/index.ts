@@ -14,6 +14,7 @@ var app = express();
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
-  graphiql: true // TODO prod thing
+  graphiql: process.env.NODE_ENV !== 'production'
 }));
+
 app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'));

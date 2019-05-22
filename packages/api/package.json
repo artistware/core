@@ -9,7 +9,8 @@
   },
   "scripts": {
     "start": "set DEBUG=* && ts-node-dev --transpileOnly --respawn ./src/index.ts",
-    "build": "./../../node_modules/.bin/tsc",
+    "build": "./../../node_modules/.bin/tsc && yarn run build:move",
+    "build:move": "cp -R ./public ./build",
     "build:clean": "rimraf build && yarn run build"
   },
   "author": "Brandon Morrison <brandon@brandonam.com> (http://brandonam.com)",
@@ -26,11 +27,15 @@
     "helmet": "^3.18.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
+    "pg": "^7.11.0",
+    "pg-hstore": "^2.3.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^2.6.3",
+    "sequelize": "^5.8.6",
     "ts-class-validator": "^0.2.2",
     "typeorm": "^0.2.17",
-    "typescript": "^3.4.5"
+    "typescript": "^3.4.5",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
