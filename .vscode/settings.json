@@ -1,3 +1,14 @@
 {
-    "typescript.tsdk": "./../node_modules/typescript/lib"
+  "typescript.tsdk": "./../node_modules/typescript/lib",
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/tsconfig.tsbuildinfo": true,
+    "**/yarn-error.log": true,
+    "packages/api/build": true,
+    "**/.gitignore": true,
+    "**/.nvmrc": true,
+    "**/LICENSE": true,
+    "**/yarn.lock": true,
+    "**/package-lock.json": true
+  }
 }
