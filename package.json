@@ -22,9 +22,8 @@
   ],
   "author": "Brandon Morrison <brandon@brandonam.com> (http://brandonam.com)",
   "license": "Apache-2.0 ",
-  "dependencies": {
-    "typeorm": "^0.2.17",
-    "typescript": "^3.4.5"
+  "devDependencies": {
+    "wsrun": "^3.6.5"
   },
   "workspaces": [
     "packages/*"

@@ -10,7 +10,7 @@
   "scripts": {
     "start": "set DEBUG=* && ts-node-dev --transpileOnly --respawn ./src/index.ts",
     "build": "./../../node_modules/.bin/tsc && yarn run build:move",
-    "build:move": "cp -R ./public ./build",
+    "build:move": "node ./buildScripts/buildCopy.js",
     "build:clean": "rimraf build && yarn run build"
   },
   "author": "Brandon Morrison <brandon@brandonam.com> (http://brandonam.com)",
