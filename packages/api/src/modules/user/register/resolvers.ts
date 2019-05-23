@@ -1,4 +1,4 @@
-/// <reference path="./../../../types/schema.d.ts" />
+/// <reference path='./../../../types/schema.d.ts' />
 import * as yup from 'yup';
 import formatYupError from './../../../util/formatYupErrors';
 import User from './../../../entity/User';
@@ -10,7 +10,8 @@ import {
     passwordLong,
     passwordShort,
     userNameLong,
-    userNameShort
+    userNameShort,
+    registrationSuccess
 } from '../validators';
 
 import {
@@ -38,7 +39,6 @@ export const resolvers: ResolverMap = {
         register: async (
             _,
             args: GQL.IRegisterOnMutationArguments
-            // { redis, url }
         ) => {
             try {
                 await schema.validate(args, {
@@ -54,18 +54,30 @@ export const resolvers: ResolverMap = {
                 username
             } = args;
 
-            const userAlreadyExists = await User.findOne({
-                where: {
-                    email
-                },
-                select: ["id"]
-            });
+            const payload = {
+                path: 'email',
+                success: false
+            };
 
-            if (userAlreadyExists) {
-                return [{
-                    path: "email",
-                    message: invalidEmail
-                }];
+            try {
+                const userExists = await User.getRepository()
+                    .createQueryBuilder('users')
+                    .where('users.username = :username', { username })
+                    .orWhere('users.email = :email', { email })
+                    .getCount();
+
+                if (userExists > 0) {
+                    return {
+                        ...payload,
+                        message: invalidEmail
+                    };
+                }
+            } catch {
+                // TODO should be a 500
+                return  {
+                    ...payload,
+                    message: 'Server 500'
+                }
             }
 
             const user = User.create({
@@ -76,14 +88,11 @@ export const resolvers: ResolverMap = {
 
             await user.save();
 
-            // if (process.env.NODE_ENV !== "test") {
-            //   await sendEmail(
-            //     email,
-            //     await createConfirmEmailLink(url, user.id, redis)
-            //   );
-            // }
-
-            return null;
+            return {
+                ...payload,
+                message: registrationSuccess,
+                success: true
+            };
         }
     }
 };

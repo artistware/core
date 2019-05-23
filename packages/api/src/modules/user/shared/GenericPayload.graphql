@@ -1,0 +1,5 @@
+type GenericPayload {
+  path: String!
+  message: String!
+  success: Boolean!
+}
