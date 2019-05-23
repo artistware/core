@@ -8,14 +8,18 @@
     "yarn": "1.16.0"
   },
   "scripts": {
-    "start": "set DEBUG=* && ts-node-dev --transpileOnly --respawn ./src/index.ts",
+    "start": "node ./build/index.js",
+    "dev": "set DEBUG=* && nodemon -e npm run dev:server, npm run gen:schema",
+    "dev:server": "ts-node-dev --transpileOnly --respawn ./src/index.ts",
     "build": "./../../node_modules/.bin/tsc && yarn run build:move",
     "build:move": "node ./buildScripts/buildCopy.js",
-    "build:clean": "rimraf build && yarn run build"
+    "build:clean": "rimraf build && yarn run build",
+    "gen:schema": "ts-node ./buildScripts/genSchema.js"
   },
   "author": "Brandon Morrison <brandon@brandonam.com> (http://brandonam.com)",
   "license": "MIT",
   "dependencies": {
+    "@gql2ts/from-schema": "^1.10.1",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
@@ -24,8 +28,10 @@
     "express": "^4.17.0",
     "express-graphql": "^0.8.0",
     "graphql": "^14.3.0",
+    "graphql-tools": "^4.0.4",
     "helmet": "^3.18.0",
     "jsonwebtoken": "^8.5.1",
+    "merge-graphql-schemas": "^1.5.8",
     "morgan": "^1.9.1",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.2",
@@ -48,7 +54,10 @@
     "@types/graphql": "^14.2.0",
     "@types/helmet": "^0.0.43",
     "@types/jsonwebtoken": "^8.3.2",
+    "@types/yup": "^0.26.13",
+    "cpx": "^1.5.0",
     "graphiql": "^0.13.0",
+    "nodemon": "^1.19.0",
     "ts-node-dev": "^1.0.0-pre.39",
     "tslint": "^5.16.0"
   }

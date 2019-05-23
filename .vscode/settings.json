@@ -9,6 +9,7 @@
     "**/.nvmrc": true,
     "**/LICENSE": true,
     "**/yarn.lock": true,
-    "**/package-lock.json": true
+    "**/package-lock.json": true,
+    "**/.gitkeep": true
   }
 }
