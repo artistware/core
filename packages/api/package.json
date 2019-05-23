@@ -2,7 +2,7 @@
   "name": "api",
   "version": "0.0.1-alpha",
   "description": "API and static webserver for Artistware core",
-  "main": "./build/index.js",
+  "main": "./build/src/index.js",
   "engines": {
     "node": "10.15.3",
     "yarn": "1.16.0"

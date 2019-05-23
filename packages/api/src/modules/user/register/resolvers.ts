@@ -1,3 +1,4 @@
+/// <reference path="./../../../types/schema.d.ts" />
 import * as yup from 'yup';
 import formatYupError from './../../../util/formatYupErrors';
 import User from './../../../entity/User';
@@ -36,7 +37,7 @@ export const resolvers: ResolverMap = {
     Mutation: {
         register: async (
             _,
-            args: any
+            args: GQL.IRegisterOnMutationArguments
             // { redis, url }
         ) => {
             try {
@@ -49,7 +50,8 @@ export const resolvers: ResolverMap = {
 
             const {
                 email,
-                password
+                password,
+                username
             } = args;
 
             const userAlreadyExists = await User.findOne({
@@ -68,7 +70,8 @@ export const resolvers: ResolverMap = {
 
             const user = User.create({
                 email,
-                password
+                password,
+                username
             });
 
             await user.save();

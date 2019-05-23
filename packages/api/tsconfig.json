@@ -21,6 +21,7 @@
   ],
   "include": [
     "ormconfig.json",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/index.ts"
   ]
 }
