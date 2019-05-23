@@ -7,4 +7,4 @@ export const resolvers: ResolverMap = {
   Query: {
     hello: String
   }
-};
+}

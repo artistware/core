@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node ./build/index.js",
-    "dev": "set DEBUG=* && nodemon -e npm run dev:server, npm run gen:schema",
+    "dev": "yarn run dev:server",
     "dev:server": "ts-node-dev --transpileOnly --respawn ./src/index.ts",
     "build": "./../../node_modules/.bin/tsc && npm run build:move",
     "build:move": "node ./buildScripts/buildCopy.js",
@@ -25,6 +25,7 @@
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "csurf": "^1.10.0",
+    "dotenv": "^8.0.0",
     "express": "^4.17.0",
     "express-graphql": "^0.8.0",
     "gql2ts": "^1.10.1",

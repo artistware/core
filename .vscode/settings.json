@@ -10,6 +10,7 @@
     "**/LICENSE": true,
     "**/yarn.lock": true,
     "**/package-lock.json": true,
-    "**/.gitkeep": true
+    "**/.gitkeep": true,
+    "**/.env": true
   }
 }

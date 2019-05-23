@@ -1,3 +1,16 @@
-Dev Notes:
-    - Helpful extensions
-        Name: JavaScript and TypeScript IntelliSense
+SAMPLE ENV:
+
+NODE_ENV=development
+TYPEORM_CONNECTION=postgres
+TYPEORM_HOST=localhost
+TYPEORM_PORT=5432
+TYPEORM_USERNAME=postgres
+TYPEORM_DATABASE=artistware
+TYPEORM_AUTO_SCHEMA_SYNC=true
+TYPEORM_ENTITIES=src/entity/**/*.ts
+TYPEORM_SUBSCRIBERS=src/subscriber/**/*.ts
+TYPEORM_MIGRATIONS=src/migration/**/*.ts
+TYPEORM_ENTITIES_DIR=src/entity
+TYPEORM_MIGRATIONS_DIR=src/migration
+TYPEORM_SUBSCRIBERS_DIR=src/subscriber
+TYPEORM_NAME=development
