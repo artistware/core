@@ -11,10 +11,10 @@
     "start": "node ./build/index.js",
     "dev": "set DEBUG=* && nodemon -e npm run dev:server, npm run gen:schema",
     "dev:server": "ts-node-dev --transpileOnly --respawn ./src/index.ts",
-    "build": "./../../node_modules/.bin/tsc && yarn run build:move",
+    "build": "./../../node_modules/.bin/tsc && npm run build:move",
     "build:move": "node ./buildScripts/buildCopy.js",
     "build:clean": "rimraf build && yarn run build",
-    "gen:schema": "ts-node ./buildScripts/genSchema.js"
+    "gen:schema": "ts-node src/util/createTypes.ts"
   },
   "author": "Brandon Morrison <brandon@brandonam.com> (http://brandonam.com)",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "graphql-tools": "^4.0.4",
     "helmet": "^3.18.0",
     "jsonwebtoken": "^8.5.1",
-    "merge-graphql-schemas": "^1.5.8",
+    "merge-graphql-schemas": "1.5.1",
     "morgan": "^1.9.1",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.2",
@@ -45,6 +45,7 @@
     "yup": "^0.27.0"
   },
   "devDependencies": {
+    "@gql2ts/types": "1.9.0",
     "@types/bcrypt": "^3.0.0",
     "@types/body-parser": "^1.17.0",
     "@types/cookie-parser": "^1.4.1",
@@ -58,6 +59,7 @@
     "cpx": "^1.5.0",
     "graphiql": "^0.13.0",
     "nodemon": "^1.19.0",
+    "ts-node": "^8.1.0",
     "ts-node-dev": "^1.0.0-pre.39",
     "tslint": "^5.16.0"
   }

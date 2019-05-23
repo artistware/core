@@ -14,7 +14,7 @@ import {
 
 import {
     ResolverMap
-} from 'aw-types';
+} from '../../../types/types.common';
 
 const schema = yup.object().shape({
     email: yup
@@ -32,55 +32,55 @@ const schema = yup.object().shape({
         .max(...passwordLong)
 });
 
-// export const resolvers: ResolverMap = {
-//     Mutation: {
-//         register: async (
-//             _,
-//             args: GQL.IRegisterOnMutationArguments
-//             // { redis, url }
-//         ) => {
-//             try {
-//                 await schema.validate(args, {
-//                     abortEarly: false
-//                 });
-//             } catch (err) {
-//                 return formatYupError(err);
-//             }
+export const resolvers: ResolverMap = {
+    Mutation: {
+        register: async (
+            _,
+            args: any
+            // { redis, url }
+        ) => {
+            try {
+                await schema.validate(args, {
+                    abortEarly: false
+                });
+            } catch (err) {
+                return formatYupError(err);
+            }
 
-//             const {
-//                 email,
-//                 password
-//             } = args;
+            const {
+                email,
+                password
+            } = args;
 
-//             const userAlreadyExists = await User.findOne({
-//                 where: {
-//                     email
-//                 },
-//                 select: ["id"]
-//             });
+            const userAlreadyExists = await User.findOne({
+                where: {
+                    email
+                },
+                select: ["id"]
+            });
 
-//             if (userAlreadyExists) {
-//                 return [{
-//                     path: "email",
-//                     message: invalidEmail
-//                 }];
-//             }
+            if (userAlreadyExists) {
+                return [{
+                    path: "email",
+                    message: invalidEmail
+                }];
+            }
 
-//             const user = User.create({
-//                 email,
-//                 password
-//             });
+            const user = User.create({
+                email,
+                password
+            });
 
-//             await user.save();
+            await user.save();
 
-//             // if (process.env.NODE_ENV !== "test") {
-//             //   await sendEmail(
-//             //     email,
-//             //     await createConfirmEmailLink(url, user.id, redis)
-//             //   );
-//             // }
+            // if (process.env.NODE_ENV !== "test") {
+            //   await sendEmail(
+            //     email,
+            //     await createConfirmEmailLink(url, user.id, redis)
+            //   );
+            // }
 
-//             return null;
-//         }
-//     }
-// };
+            return null;
+        }
+    }
+};

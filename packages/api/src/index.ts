@@ -3,20 +3,20 @@ var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 const genSchema = require('./../buildScripts/genSchema.js');
 
-// var schema = buildSchema(`
-//   type Query {
-//     hello: String
-//   }
-// `);
+var schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+`);
 
-// var root = { hello: () => 'Hello world!' };
+var root = { hello: () => 'Hello world!' };
 
 var app = express();
-// app.use('/graphql', graphqlHTTP({
-//   schema: schema,
-//   rootValue: root,
-//   graphiql: process.env.NODE_ENV !== 'production'
-// }));
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: process.env.NODE_ENV !== 'production'
+}));
 
 const server = new graphqlHTTP({
   schema: genSchema() as any,
