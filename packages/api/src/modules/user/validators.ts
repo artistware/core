@@ -10,3 +10,4 @@ export const userNameShort:YupNum = [3, 'Username must have atleast 3 characters
 export const emailLong:YupNum = [125, 'Email must not exceed 125 characters'];
 export const emailShort:YupNum = [3, 'Email must be atleast 3 characters'];
 export const registrationSuccess = 'Registration successful';
+export const loginFail = 'Login attempt failed';

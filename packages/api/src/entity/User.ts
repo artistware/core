@@ -37,6 +37,16 @@ export default class User extends BaseEntity {
     })
     forgotPasswordLocked: boolean;
 
+    @Column('int', {
+        default: 0
+    })
+    count: number;
+
+    @Column('array', {
+        default: ['user']
+    })
+    roles: [];
+
     @BeforeInsert()
     async hashPasswordBeforeInsert() {
         try {

@@ -13,9 +13,10 @@ dotenv.config();
 
     app.use('/graphql', graphqlHTTP({
         schema: genSchema() as any,
-        graphiql: true,
+        graphiql: process.env.NODE_ENV === 'development' ? true : false,
         context: ({ request }) => ({
             // rootValue: GQL
+
             url: request.protocol + "://" + request.get("host"),
             req: request
         })

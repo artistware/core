@@ -2,6 +2,7 @@
 import * as yup from 'yup';
 import formatYupError from './../../../util/formatYupErrors';
 import User from './../../../entity/User';
+import * as bcrypt from 'bcrypt';
 
 import {
     emailLong,
@@ -9,9 +10,8 @@ import {
     invalidEmail,
     passwordLong,
     passwordShort,
-    userNameLong,
-    userNameShort,
-    registrationSuccess
+    registrationSuccess,
+    loginFail
 } from '../validators';
 
 import {
@@ -24,10 +24,6 @@ const schema = yup.object().shape({
         .min(...emailShort)
         .max(...emailLong)
         .email(invalidEmail),
-    username: yup
-        .string()
-        .min(...userNameShort)
-        .max(...userNameLong),
     password: yup
         .string()
         .min(...passwordShort)
@@ -36,11 +32,11 @@ const schema = yup.object().shape({
 
 export const resolvers: ResolverMap = {
     Mutation: {
-        register: async (
+        login: async (
             _,
-            args: GQL.IRegisterOnMutationArguments
+            args: GQL.ILoginOnMutationArguments
         ) => {
-            // TODO Test against this
+            // // TODO Test against this
             try {
                 await schema.validate(args, {
                     abortEarly: false
@@ -51,8 +47,7 @@ export const resolvers: ResolverMap = {
 
             const {
                 email,
-                password,
-                username
+                password
             } = args;
 
             const payload = {
@@ -61,39 +56,32 @@ export const resolvers: ResolverMap = {
             };
 
             try {
-                const userExists = await User.getRepository()
-                    .createQueryBuilder('users')
-                    .where('users.username = :username', { username })
-                    .orWhere('users.email = :email', { email })
-                    .getCount();
+                const user = await User.findOne({
+                    where: { email },
+                    select: ['password', 'salt']
+                });
+                
+                const pwMatch = await bcrypt.compare(password, user.password);
 
-                if (userExists > 0) {
+                if (pwMatch) {
                     return {
                         ...payload,
-                        message: invalidEmail
+                        success: true,
+                        message: 'Login Success'
                     };
+                } else {
+                    return {
+                        ...payload,
+                        message: loginFail
+                    }
                 }
+
             } catch {
-                // TODO should be a 500
-                return  {
+                return {
                     ...payload,
-                    message: 'Server 500'
+                    message: loginFail
                 }
             }
-
-            const user = User.create({
-                email,
-                password,
-                username
-            });
-
-            await user.save();
-
-            return {
-                ...payload,
-                message: registrationSuccess,
-                success: true
-            };
         }
     }
 };
