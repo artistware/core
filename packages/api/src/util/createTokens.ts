@@ -63,8 +63,8 @@ export default function createTokens({ id, count, roles }) {
     };
 
     // NOTE | Important https://github.com/auth0/node-jsonwebtoken/issues/208#issuecomment-231861138
-    const refresh = jwt.sign(refreshPayload, new Buffer(process.env.JWT_SECRET, 'base64'), refreshSettings);
-    const access = jwt.sign(accessPayload, new Buffer(process.env.JWT_SECRET, 'base64'), accessSettings);
+    const refresh = jwt.sign(refreshPayload, Buffer.from(process.env.JWT_SECRET, 'base64'), refreshSettings);
+    const access = jwt.sign(accessPayload, Buffer.from(process.env.JWT_SECRET, 'base64'), accessSettings);
 
     const tokens = Object.freeze({ 
         refresh: { 

@@ -8,9 +8,8 @@
     "yarn": "1.16.0"
   },
   "scripts": {
-    "start": "node ./build/index.js",
-    "dev": "yarn run dev:server",
-    "dev:server": "ts-node-dev --transpileOnly --respawn ./src/index.ts",
+    "start": "node -r dotenv/config ./build/index.js",
+    "dev": "ts-node-dev -r dotenv/config --transpileOnly --respawn ./src/index.ts",
     "build": "./../../node_modules/.bin/tsc && npm run build:move",
     "build:move": "node ./buildScripts/buildCopy.js",
     "build:clean": "rimraf build && yarn run build",

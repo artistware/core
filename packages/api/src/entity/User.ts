@@ -6,6 +6,7 @@ import {
     PrimaryGeneratedColumn,
     BeforeInsert
 } from 'typeorm';
+import { Roles } from './../types/types.common';
 
 @Entity('users')
 export default class User extends BaseEntity {
@@ -42,10 +43,14 @@ export default class User extends BaseEntity {
     })
     count: number;
 
-    @Column('array', {
-        default: ['user']
+    @Column({
+        type: 'enum',
+        enum: Roles,
+        array: true,
+        nullable: false,
+        default: [Roles.USER]
     })
-    roles: [];
+    roles: Roles[];
 
     @BeforeInsert()
     async hashPasswordBeforeInsert() {

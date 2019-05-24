@@ -1,9 +1,11 @@
+import cors from 'cors';
+
 const _refreshMaxAge = Math.floor(1000 * 60 * 60 * 24 * 2); // 2 days
 const _accessMaxAge = Math.floor(1000 * 60 * 15); // 15 min
 
 export const nbfBuffer = 500;
-export const isDev = (app) => app.get('env') === 'development' ? true : false;
-export const CORS = {
+export const isDev = process.env.NODE_ENV === 'development' ? true : false;
+export const CORS:cors.CorsOptions = {
     origin: (origin, callback) => {
         const re = `(http(s)?\\:\\/\\/)?\\b${process.env.ROOT_DOMAIN}(:?\\d+(\\/)?)?`;
         const domain = new RegExp(re, 'g');
@@ -11,7 +13,7 @@ export const CORS = {
             callback(null, true);
         } else {
             console.log('corsissue');
-            callback(500);
+            callback(null);
         }
     },
     methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],

@@ -11,7 +11,7 @@ export default async function setRequestUser (req, res, next) {
     
     let _id:string;
     try {
-        const data = jwt.verify(accessToken, new Buffer(process.env.JWT_SECRET, 'base64')) as AccessTokenPayload;
+        const data = jwt.verify(accessToken, Buffer.from(process.env.JWT_SECRET, 'base64')) as AccessTokenPayload;
         _id = data.sub;
     } catch (e) {
         console.log('invalid access token');
@@ -22,7 +22,7 @@ export default async function setRequestUser (req, res, next) {
     let data;
 
     try {
-        data = jwt.verify(refreshToken, new Buffer(process.env.JWT_SECRET, 'base64'));
+        data = jwt.verify(refreshToken, Buffer.from(process.env.JWT_SECRET, 'base64'));
     } catch (e) {
         console.log('invalid refresh token');
         return next();

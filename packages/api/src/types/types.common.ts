@@ -4,9 +4,15 @@ import { type } from 'os';
 export type YupNum = [number, yup.TestOptionsMessage];
 export type YupString = [string, yup.TestOptionsMessage];
 
+
+export interface ClientInfo {
+
+}
+
 export interface Context {
-    url: string;
+    info: ClientInfo;
     req: Express.Request;
+    res: Express.Response;
 }
 
 export type Resolver = (
@@ -36,7 +42,23 @@ export interface ResolverMap {
 // developer: provisioned access on acl from owner at tenant level
 // moderator: typical content management
 // user: has no tenant host, read access, personal profile etc write only
-export type Roles = ['aw-admin' | 'aw-developer' | 'owner' | 'developer' | 'moderator' | 'user'];
+// export type Roles = ['aw-admin' | 'aw-developer' | 'owner' | 'developer' | 'moderator' | 'user'];
+export enum RoleKeys {
+    AWADMIN,
+    AWDEV,
+    OWNER,
+    DEV,
+    MOD,
+    USER
+}; 
+export enum Roles {
+    AWADMIN = 'aw-admin',
+    AWDEV = 'aw-developer',
+    OWNER = 'owner',
+    DEV = 'developer',
+    MOD = 'moderator',
+    USER = 'user'
+};
 
 // TODO determined by api
 // action:rescoure

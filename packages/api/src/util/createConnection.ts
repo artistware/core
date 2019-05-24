@@ -1,13 +1,15 @@
 import {
-    getConnectionOptions,
+    // getConnectionOptions,
     createConnection
 } from 'typeorm';
 
 const create = async (resetDB: boolean = false) => {
     try {
-        // const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
+        // NOTE ormconfig style ... using .env | possibly yaml in future
+        // const connectionOptions = await getConnectionOptions(process.env.NODE_ENV); 
+
         const connect = await createConnection();
-        await connect.synchronize();
+        await connect.synchronize(resetDB);
         // TODO test to prod settings programattically
         return connect;
     } catch (e) {
