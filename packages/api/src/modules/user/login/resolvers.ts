@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import formatYupError from './../../../util/formatYupErrors';
 import User from './../../../entity/User';
 import * as bcrypt from 'bcrypt';
+import createTokens from './../../../util/createTokens';
 
 import {
     emailLong,
@@ -10,8 +11,8 @@ import {
     invalidEmail,
     passwordLong,
     passwordShort,
-    registrationSuccess,
-    loginFail
+    loginFail,
+    userNameLong
 } from '../validators';
 
 import {
@@ -34,7 +35,8 @@ export const resolvers: ResolverMap = {
     Mutation: {
         login: async (
             _,
-            args: GQL.ILoginOnMutationArguments
+            args: GQL.ILoginOnMutationArguments,
+            context
         ) => {
             // // TODO Test against this
             try {
@@ -58,12 +60,18 @@ export const resolvers: ResolverMap = {
             try {
                 const user = await User.findOne({
                     where: { email },
-                    select: ['password', 'salt']
+                    select: ['password', 'salt', 'id', 'count', 'roles']
                 });
                 
                 const pwMatch = await bcrypt.compare(password, user.password);
 
                 if (pwMatch) {
+                    const { id, count, roles } = user;
+                    const tokens = createTokens({id, count, roles});
+                    console.log(`Access and Refresh for UserID: ${id}`)
+                    context.res.cookie('refresh_token', tokens.refresh.token, tokens.refresh.settings);
+                    context.res.cookie('access_token', tokens.access.token, tokens.access.settings);
+    
                     return {
                         ...payload,
                         success: true,
@@ -76,7 +84,7 @@ export const resolvers: ResolverMap = {
                     }
                 }
 
-            } catch {
+            } catch (e) {
                 return {
                     ...payload,
                     message: loginFail

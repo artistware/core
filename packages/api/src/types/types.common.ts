@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { type } from 'os';
+import e from 'express';
 
 export type YupNum = [number, yup.TestOptionsMessage];
 export type YupString = [string, yup.TestOptionsMessage];
@@ -11,8 +12,8 @@ export interface ClientInfo {
 
 export interface Context {
     info: ClientInfo;
-    req: Express.Request;
-    res: Express.Response;
+    req: e.Request;
+    res: e.Response;
 }
 
 export type Resolver = (

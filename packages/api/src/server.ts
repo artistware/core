@@ -5,7 +5,7 @@ import * as graphqlHTTP from 'express-graphql';
 import genSchema from './util/genSchema';
 import createConnection from './util/createConnection';
 import * as cors from 'cors';
-import {CORS, isDev} from './config/settings';
+import {CORS, CORS_DEV, isDev} from './config/settings';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import setRequestUser from './middleware/setRequestUser';
@@ -14,24 +14,28 @@ import getClientInfo from './util/getClientInfo';
 import keys from './config/keys';
 const { DB_RESET, PORT } = keys;
 const DB_RESET_CHECKED = isDev ? DB_RESET : false;
+const ENV_BASED_CORS = isDev ? CORS_DEV : CORS;
 
 const start = async ():Promise<e.Application> => {
     const app = express();
     app.set('PORT', PORT);
-    app.use(cors(CORS));
+    app.use(cors(ENV_BASED_CORS));
 
+    const schema = genSchema() as any;
     app.use('/graphql',
         bodyParser.json(),
-        cookieParser(),
+        cookieParser(keys.COOKIE_SECRET),
         setRequestUser,
-        graphqlHTTP({
-            schema: genSchema() as any,
-            graphiql: isDev ? true : false,
-            context: ({ req, res }) => ({
-                info: getClientInfo(req), // TODO logging
-                req,
-                res
-            })
+        graphqlHTTP((req, res) => {
+            return {
+                schema,
+                graphiql: isDev ? true : false,
+                context: {
+                    info: getClientInfo(req), // TODO logging
+                    req,
+                    res
+                }
+            }
         })
     );
 

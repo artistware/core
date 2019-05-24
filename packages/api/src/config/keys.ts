@@ -2,7 +2,7 @@ let keys = {
     DOMAIN: process.env.ROOT_DOMAIN,
     ISSUER: [process.env.ROOT_DOMAIN],
     AUDIENCE: [process.env.ROOT_DOMAIN],
-    KEYS: process.env.COOKIE_SECRET,
+    COOKIE_SECRET: process.env.COOKIE_SECRET,
     DB_RESET: false,
     PORT: process.env.PORT
 };

@@ -2,7 +2,6 @@ import * as jwt from 'jsonwebtoken';
 import User from './../entity/User';
 import {AccessTokenPayload} from './../types/types.common';
 import createTokens from './../util/createTokens';
-// import { create } from 'domain';
 
 export default async function setRequestUser (req, res, next) {
     const refreshToken = req.signedCookies['refresh_token'];

@@ -21,6 +21,13 @@ export const CORS:cors.CorsOptions = {
     optionsSuccessStatus: 200
 };
 
+export const CORS_DEV:cors.CorsOptions = {
+    origin: isDev ? true : false,
+    methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],
+    preflightContinue: true,
+    optionsSuccessStatus: 200
+};
+
 export const nbf:(number) => number = (today) => Math.floor((today / 1000) + nbfBuffer);
 export const refreshMaxAge:(number?) => number = (today) => today ? Math.floor((today / 1000) + _refreshMaxAge) : _refreshMaxAge; // 2 days
 export const accessMaxAge:(number?) => number = (today) => today ? Math.floor((today /  1000) + _accessMaxAge) : _accessMaxAge; // 15 mins

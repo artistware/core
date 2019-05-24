@@ -1,1 +1,6 @@
 build
+node_modules
+*.log
+*.tsbuildinfo
+.DS_STORE
+.env
