@@ -1,46 +1,50 @@
 /// <path reference="./../types/schema.d.ts" />
 import * as express from 'express';
-import e from 'express';
 import * as graphqlHTTP from 'express-graphql';
 import genSchema from './util/genSchema';
 import createConnection from './util/createConnection';
 import * as cors from 'cors';
-import {CORS, CORS_DEV, isDev} from './config/settings';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import setRequestUser from './middleware/setRequestUser';
 import getClientInfo from './util/getClientInfo';
 
 import keys from './config/keys';
-const { DB_RESET, PORT } = keys;
-const DB_RESET_CHECKED = isDev ? DB_RESET : false;
-const ENV_BASED_CORS = isDev ? CORS_DEV : CORS;
+import SETTINGS from './config/settings';
+import e from 'express';
+
+const {
+    PORT,
+    ENV_BASED_CORS,
+    ENV_BASED_RESET
+} = SETTINGS;
 
 const start = async ():Promise<e.Application> => {
     const app = express();
-    app.set('PORT', PORT);
+    app.set('LISTEING_PORT', PORT);
     app.use(cors(ENV_BASED_CORS));
 
     const schema = genSchema() as any;
+    console.log(schema);
+
+    // TODO wrap all middle firsts
+    // TODO wrap all middlleware seconds
+    // TODO redis 15 min cache access
+
     app.use('/graphql',
         bodyParser.json(),
         cookieParser(keys.COOKIE_SECRET),
         setRequestUser,
-        graphqlHTTP((req, res) => {
-            return {
-                schema,
-                graphiql: isDev ? true : false,
-                context: {
-                    info: getClientInfo(req), // TODO logging
-                    req,
-                    res
-                }
-            }
-        })
+        graphqlHTTP(() => null
+            // graph ql non mutation schema and those who dont need response
+            // MIDDLEWARED graph ql mutations with res object
+            // MY HEADER AND/OR COOKIE RESPONSES/REDIS SESSION
+            // MY ERROR HANDLING
+        )
     );
 
-    await createConnection(DB_RESET_CHECKED);
-    console.log(`db connected, reset = ${DB_RESET_CHECKED}`);
+    await createConnection(ENV_BASED_RESET);
+    console.log(`db connected, reset = ${ENV_BASED_RESET}`);
 
     return Promise.resolve(app);
 };

@@ -4,7 +4,7 @@ let keys = {
     AUDIENCE: [process.env.ROOT_DOMAIN],
     COOKIE_SECRET: process.env.COOKIE_SECRET,
     DB_RESET: false,
-    PORT: process.env.PORT
+    LISTENING_PORT: typeof Number(process.env.PORT) === 'number' ? Number(process.env.PORT) : 3000
 };
 
 // TODO write test

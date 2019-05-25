@@ -1,11 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-import { 
-    refreshMaxAge,
-    accessMaxAge,
-    COOKIE_SETTINGS,
-    nbf,
-    nbfBuffer
-} from './../config/settings';
+import SETTINGS from './../config/settings';
 import keys from './../config/keys';
 
 // TS TODO
@@ -26,7 +20,12 @@ export default function createTokens({ id, count, roles }) {
     // noTimestamp?: boolean;
     // header?: object;
     // encoding?: string;
-
+    const { 
+        NBF_BUFFER,
+        COOKIE_SETTINGS,
+        refreshMaxAge,
+        accessMaxAge
+    } = SETTINGS;
     const refreshPayload = {
         iat: dateTime,
         iss: keys.ISSUER, // URL
@@ -35,7 +34,7 @@ export default function createTokens({ id, count, roles }) {
 
     const refreshSettings = {
         expiresIn: '2d',
-        notBefore: nbfBuffer.toString(),
+        notBefore: NBF_BUFFER.toString(),
         audience: keys.AUDIENCE // TODO tenant qualified domain or Oauth   
     };
 
@@ -50,7 +49,7 @@ export default function createTokens({ id, count, roles }) {
 
     const accessSettings = {
         expiresIn: '15m',
-        notBefore: nbfBuffer.toString(),
+        notBefore: NBF_BUFFER.toString(),
         audience: keys.AUDIENCE // TODO tenant qualified domain or Oauth   
     };
 

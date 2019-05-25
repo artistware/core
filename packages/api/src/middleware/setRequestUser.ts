@@ -3,6 +3,7 @@ import User from './../entity/User';
 import {AccessTokenPayload} from './../types/types.common';
 import createTokens from './../util/createTokens';
 
+// TODO 15 min redis cash over a everytime refresh check
 export default async function setRequestUser (req, res, next) {
     const refreshToken = req.signedCookies['refresh_token'];
     const accessToken = req.signedCookies['access_token'];
@@ -33,16 +34,16 @@ export default async function setRequestUser (req, res, next) {
     });
 
     if (!u || u.count !== data.count) {
-        console.log('intentional invalidation')
-        return next()
+        console.log('intentional invalidation');
+        return next();
     }
 
     const { id, count, roles } = u;
-    const tokens = createTokens({ id, count, roles })
+    const tokens = createTokens({ id, count, roles });
     
-    console.log(`Access and Refresh for UserID: ${id}`)
-    res.cookie('refresh_token', tokens.refresh.token, tokens.refresh.settings)
-    res.cookie('access_token', tokens.access.token, tokens.access.settings)
-    req.user = { id, roles }
-    next()
+    console.log(`Access and Refresh for UserID: ${id}`);
+    res.cookie('refresh_token', tokens.refresh.token, tokens.refresh.settings);
+    res.cookie('access_token', tokens.access.token, tokens.access.settings);
+    req.user = { id, roles };
+    next();
 }

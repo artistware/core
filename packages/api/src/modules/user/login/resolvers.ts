@@ -11,8 +11,7 @@ import {
     invalidEmail,
     passwordLong,
     passwordShort,
-    loginFail,
-    userNameLong
+    loginFail
 } from '../validators';
 
 import {
