@@ -20,6 +20,11 @@ export default function createTokens({ id, count, roles }) {
     // noTimestamp?: boolean;
     // header?: object;
     // encoding?: string;
+    console.log('createTokens', id, count, roles);
+    if (!id && !count && !roles.length) {
+        return null;
+    }
+
     const { 
         NBF_BUFFER,
         COOKIE_SETTINGS,
@@ -34,23 +39,25 @@ export default function createTokens({ id, count, roles }) {
 
     const refreshSettings = {
         expiresIn: '2d',
-        notBefore: NBF_BUFFER.toString(),
+        // notBefore: NBF_BUFFER, // TODO awkward implementation
         audience: keys.AUDIENCE // TODO tenant qualified domain or Oauth   
     };
 
     const accessPayload = {
         iat: dateTime,
-        sub: id,
-        iss: keys.ISSUER // URL
+        iss: keys.ISSUER, // URL
         // scope?: Scopes;
         // user_metadata: UserMetadata;
-        // app_metadata: AppMetadata;
+        app_metadata: {
+            roles
+        }
     };
 
     const accessSettings = {
         expiresIn: '15m',
-        notBefore: NBF_BUFFER.toString(),
-        audience: keys.AUDIENCE // TODO tenant qualified domain or Oauth   
+        // notBefore: NBF_BUFFER, // TODO awkward implementation
+        audience: keys.AUDIENCE,
+        subject: id  // TODO tenant qualified domain or Oauth   
     };
 
     // NOTE | Important https://github.com/auth0/node-jsonwebtoken/issues/208#issuecomment-231861138

@@ -3,3 +3,6 @@ type GenericPayload {
   message: String!
   success: Boolean!
 }
+
+
+# TODO seems off

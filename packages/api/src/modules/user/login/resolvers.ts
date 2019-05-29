@@ -37,24 +37,34 @@ export const resolvers: ResolverMap = {
             args: GQL.ILoginOnMutationArguments,
             context
         ) => {
+            console.log(args);
+            console.log('login');
+            console.log('reqDef: ', !!context.req);
+            console.log('isAuthenticated', context['isAuthenticated']);
             // // TODO Test against this
+
+            const payload = {
+                path: 'email',
+                success: false
+            };
+
             try {
                 await schema.validate(args, {
                     abortEarly: false
                 });
             } catch (err) {
-                return formatYupError(err);
+                console.log('yuperr', err);
+                // NOTE formatYupError(err); <- u could loop to create messages
+                return {
+                    ...payload,
+                    message: err.message
+                }
             }
 
             const {
                 email,
                 password
             } = args;
-
-            const payload = {
-                path: 'email',
-                success: false
-            };
 
             try {
                 const user = await User.findOne({
@@ -77,6 +87,7 @@ export const resolvers: ResolverMap = {
                         message: 'Login Success'
                     };
                 } else {
+                    console.log('huh');
                     return {
                         ...payload,
                         message: loginFail
@@ -84,6 +95,8 @@ export const resolvers: ResolverMap = {
                 }
 
             } catch (e) {
+                console.log('error');
+                console.log(e);
                 return {
                     ...payload,
                     message: loginFail

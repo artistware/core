@@ -22,7 +22,12 @@ column: number;
 
 interface IQuery {
 __typename: "Query";
-hello: string | null;
+me: IUserJWT | null;
+}
+
+interface IUserJWT {
+__typename: "UserJWT";
+sub: string;
 }
 
 interface IMutation {

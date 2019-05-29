@@ -5,8 +5,13 @@ import start from './server';
 (async () => {
     try {
         const server = await start();
-        const PORT = server.get('PORT');
+        const PORT = server.get('LISTENING_PORT');
         server.listen(PORT || 3000, () => console.log(`listening on ${PORT}`));
+
+        // const server = await start();
+        // server.listen().then(({ url }) => {
+        //     console.log(`🚀 Server ready at ${url}`);
+        // });
     } catch (e) {
         console.log(e);
         // TODO intricate pro error handling for grown ups

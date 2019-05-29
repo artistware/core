@@ -10,9 +10,14 @@ export interface ClientInfo {
 
 }
 
+// TODO other mutltitenant iss 
+export interface AuthenticatedRequest extends e.Request {
+    user: AccessTokenPayload;
+}
+
 export interface Context {
     info: ClientInfo;
-    req: e.Request;
+    req: AuthenticatedRequest;
     res: e.Response;
 }
 
@@ -64,7 +69,21 @@ export enum Roles {
 // TODO determined by api
 // action:rescoure
 // i.e. create:user
-export type Scopes = [];
+// this should be documented
+// ACTIONS
+// VIEW
+
+// to
+// RESOURCES
+export enum ScopeKeys {
+    GET_ME
+}
+
+export enum Scopes {
+    GET_ME = 'get:me'
+}
+
+// TODO roles based default scopes
 
 export interface AppMetadata {
     // NOTE May not contain
@@ -84,11 +103,8 @@ export interface RefreshTokenPayload {
 export interface AccessTokenPayload {
     sub: string; // ID
     iss: string; // URL
-    aud: string; // target machine or oauth provier
-    exp: number;
     iat: number;
-    nbf: number; // not valid before .. ? Numeric date?  pads valid time + x MS
-    scope?: Scopes;
+    scope: Scopes;
     user_metadata?: UserMetadata;
     app_metadata?: AppMetadata;
 }

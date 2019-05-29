@@ -27,6 +27,7 @@
       "no-misused-new": false,
       "max-classes-per-file": false,
       "callable-types": false,
-      "object-literal-shorthand": false
+      "object-literal-shorthand": false,
+      "indent": [true, "spaces", 4]
     }
   }
