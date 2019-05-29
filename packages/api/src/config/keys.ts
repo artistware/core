@@ -4,7 +4,12 @@ let keys = {
     AUDIENCE: [process.env.ROOT_DOMAIN],
     COOKIE_SECRET: process.env.COOKIE_SECRET,
     DB_RESET: false,
-    LISTENING_PORT: typeof Number(process.env.PORT) === 'number' ? Number(process.env.PORT) : 3000
+    LISTENING_PORT: typeof Number(process.env.PORT) === 'number' ? Number(process.env.PORT) : 3000,
+    REDIS_PORT: typeof Number(process.env.REDIS_PORT) === 'number' ? Number(process.env.REDIS_PORT) : 6379,
+    REDIS_HOST: process.env.REDIS_HOST,
+    REDIS_DB: process.env.REDIS_DB,
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+    SESSION_SECRET: process.env.SESSION_SECRET
 };
 
 // TODO write test

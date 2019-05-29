@@ -1,5 +1,8 @@
 import * as yup from 'yup';
 import e from 'express';
+import { Redis } from 'ioredis';
+import session from 'express-session';
+import { SessionState } from 'http2';
 
 export type YupNum = [number, yup.TestOptionsMessage];
 export type YupString = [string, yup.TestOptionsMessage];
@@ -9,14 +12,22 @@ export interface ClientInfo {
 
 }
 
+export interface ExpressReqUser {
+    sub: string;
+    app_metadata: AppMetadata;
+}
+
 // TODO other mutltitenant iss 
 export interface AuthenticatedRequest extends e.Request {
-    user: AccessTokenPayload;
+    user: ExpressReqUser;
 }
 
 export interface Context {
     req: AuthenticatedRequest;
     res: e.Response;
+    isAuthenticated: boolean;
+    redis: Redis,
+    session: any
 }
 
 export type Resolver = (

@@ -4,6 +4,7 @@ import formatYupError from './../../../util/formatYupErrors';
 import User from './../../../entity/User';
 import * as bcrypt from 'bcrypt';
 import createTokens from './../../../util/createTokens';
+import { REDIS_SESSION_PF, _redisTTL } from './../../../config/settings';
 
 import {
     emailLong,
@@ -37,12 +38,6 @@ export const resolvers: ResolverMap = {
             args: GQL.ILoginOnMutationArguments,
             context
         ) => {
-            // console.log(args);
-            // console.log('login');
-            // console.log('reqDef: ', !!context.req);
-            // console.log('isAuthenticated', context['isAuthenticated']);
-            // // TODO Test against this
-
             const payload = {
                 path: 'email',
                 success: false
@@ -79,6 +74,7 @@ export const resolvers: ResolverMap = {
                     console.log(`Access and Refresh for UserID: ${id}`)
                     context.res.cookie('refresh_token', tokens.refresh.token, tokens.refresh.settings);
                     context.res.cookie('access_token', tokens.access.token, tokens.access.settings);
+                    await context.redis.set(`${REDIS_SESSION_PF}${id}`, context.req.sessionID, 'PX', _redisTTL); // 5 min NOTE consider no dupe
     
                     return {
                         ...payload,

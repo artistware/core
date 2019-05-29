@@ -1,6 +1,5 @@
 import {
-    ResolverMap,
-    Context
+    ResolverMap
 } from "../../../types/types.common";
 
 

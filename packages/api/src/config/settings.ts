@@ -1,9 +1,24 @@
 import cors from 'cors';
 import keys from './keys';
-const _isDev = process.env.NODE_ENV === 'development' ? true : false;
-const _refreshMaxAge = Math.floor(1000 * 60 * 60 * 24 * 2); // 2 days
+export const REDIS_SESSION_PF = 'ress:';
+export const _refreshMaxAge = Math.floor(1000 * 60 * 60 * 24 * 2); // 2 days
+export const _redisTTL = Math.floor(1000 * 60 * 5); // 5 min   
 const _accessMaxAge = Math.floor(1000 * 60 * 15); // 15 min
-const { DB_RESET, LISTENING_PORT, DOMAIN } = keys;
+
+const _isDev = process.env.NODE_ENV === 'development' ? true : false;
+
+// NOTE every five mins we refer back to the 
+// redis session expires, refering back to the refresh token
+// renew redis session
+const {
+    DB_RESET,
+    LISTENING_PORT,
+    DOMAIN,
+    REDIS_DB,
+    REDIS_HOST,
+    REDIS_PASSWORD,
+    REDIS_PORT
+} = keys;
 
 const CORS:cors.CorsOptions = {
     origin: (origin, callback) => {
@@ -29,6 +44,7 @@ const CORS_DEV:cors.CorsOptions = {
     optionsSuccessStatus: 200
 };
 
+
 namespace SETTINGS {
     export const isDev = _isDev;
     export const NBF_BUFFER = 500;
@@ -46,6 +62,14 @@ namespace SETTINGS {
         secure: process.env.NODE_ENV === 'production' ? true : false,
         signed: true
     });
+
+    export const REDIS_SETTINGS = {
+        port: REDIS_PORT,
+        host: REDIS_HOST,
+        password: REDIS_PASSWORD,
+        ttl: _redisTTL,
+        prefix: REDIS_SESSION_PF
+    };
 }
 
 export default SETTINGS;
