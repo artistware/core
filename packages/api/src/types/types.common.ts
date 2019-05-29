@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-import { type } from 'os';
 import e from 'express';
 
 export type YupNum = [number, yup.TestOptionsMessage];
@@ -16,7 +15,6 @@ export interface AuthenticatedRequest extends e.Request {
 }
 
 export interface Context {
-    info: ClientInfo;
     req: AuthenticatedRequest;
     res: e.Response;
 }
@@ -89,7 +87,7 @@ export interface AppMetadata {
     // NOTE May not contain
     // blocked clientID created_at email email_verified global_client_id 
     // globalClientID identities lastIP lastLogin metadata user_id loginsCount
-    roles: Roles;
+    roles: [Roles];
 }
 
 export interface UserMetadata {

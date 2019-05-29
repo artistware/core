@@ -1,17 +1,13 @@
 /// <path reference="./../types/schema.d.ts" />
 import * as express from 'express';
-// import * as graphqlHTTP from 'express-graphql';
-import { ApolloServer, gql } from 'apollo-server-express';
+import { ApolloServer } from 'apollo-server-express';
 import genSchema from './util/genSchema';
 import createConnection from './util/createConnection';
 import * as cors from 'cors';
-import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
-import setRequestUser from './middleware/setRequestUser';
-import getClientInfo from './util/getClientInfo';
-import { addDirectiveResolveFunctionsToSchema } from 'graphql-directive';
-// import resolverMap from './modules/directives';
+import setRequestUser from './util/setRequestUser';
 import { AuthenticatedRequest } from './types/types.common';
+import devApolloLogging from './util/devApolloLogging';
 
 import keys from './config/keys';
 import SETTINGS from './config/settings';
@@ -21,8 +17,7 @@ const {
     PORT,
     ENV_BASED_CORS,
     ENV_BASED_RESET,
-    isDev,
-    COOKIE_SETTINGS
+    isDev
 } = SETTINGS;
 
 const {
@@ -41,17 +36,14 @@ const start = async ():Promise<e.Application> => {
 
     const schema = genSchema() as any;
     // TODO throttling
-
-    // TODO wrap all middle firsts
-    // TODO wrap all middlleware seconds
     // TODO redis 15 min cache access
 
     const apollo = new ApolloServer({
         schema,
         context: async (ctx: { req: AuthenticatedRequest, res: e.Response }) => {
-            console.log('requser checked at server: ', ctx.req.user);
+            isDev ? devApolloLogging : (() => null)();
             return {
-                isAuthenticated: !!(ctx.req.user && ctx.req.user.sub),
+                isAuthenticated: !!(ctx.req.user && ctx.req.user.sub),  // it could be a directive resolver.  this is just t/f
                 req: ctx.req,
                 res: ctx.res
             }

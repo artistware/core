@@ -7,16 +7,16 @@ import { Context } from 'apollo-server-core';
 
 // TODO 15 min redis cash over a everytime refresh check
 export default async function setRequestUser (req, res, next) {
-    // console.log(context);
     const refreshToken = req.signedCookies['refresh_token'];
     const accessToken = req.signedCookies['access_token'];
     if (!refreshToken && !accessToken) return next();
     
     let _id:string;
+    let _app_metadata:{};
     try {
         const data = jwt.verify(accessToken, Buffer.from(process.env.JWT_SECRET, 'base64')) as AccessTokenPayload;
         _id = data.sub.toString();
-        console.log(data);
+        _app_metadata = data.app_metadata;
     } catch (e) {
         console.log('invalid access token: ', e.msg);
     }
@@ -43,12 +43,11 @@ export default async function setRequestUser (req, res, next) {
     }
 
     const { count, roles } = u;
-    console.log('foundusr in sru:', u);
     const tokens = createTokens({ id: _id, count, roles });
     
     console.log(`Access and Refresh for UserID: ${_id}`);
     res.cookie('refresh_token', tokens.refresh.token, tokens.refresh.settings);
     res.cookie('access_token', tokens.access.token, tokens.access.settings);
-    req.user = { id: _id, roles };
+    req.user = { sub: _id, app_metadata: _app_metadata };
     return next();
 }

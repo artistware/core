@@ -1,0 +1,21 @@
+directive @role(
+    requires: Role = admin,
+) on OBJECT | FIELD_DEFINITION
+
+enum Role {
+    admin,
+    user
+}
+
+type AppMetadata {
+    roles: [String!]!
+}
+
+type UserJWT {
+    sub: String!
+    app_metadata: AppMetadata
+}
+
+type Query @role(requires: user) {
+    me: UserJWT 
+}

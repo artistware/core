@@ -3,23 +3,20 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
 import * as glob from 'glob';
+import { schemaDirectives } from './../directives';
 
 const genSchema = () => {
   const pathToModules = path.join(__dirname, '../modules');
-
-  let typeDefs;
 
   const graphqlTypes = glob
     .sync(`${pathToModules}/**/*.graphql`)
     .map(x => fs.readFileSync(x, { encoding: 'utf8' }));
 
-  typeDefs = graphqlTypes;
-
   const graphQlScriptTypes = glob
     .sync(`${pathToModules}/**/*.graphql.?s`)
     .map(schema => require(schema).type);
   
-  typeDefs = typeDefs.concat(graphQlScriptTypes);
+  let typeDefs = graphQlScriptTypes.concat(graphqlTypes);
 
   const resolvers = glob
     .sync(`${pathToModules}/**/resolvers.?s`)
@@ -27,7 +24,8 @@ const genSchema = () => {
 
   return makeExecutableSchema({
     typeDefs: mergeTypes(typeDefs),
-    resolvers: mergeResolvers(resolvers)
+    resolvers: mergeResolvers(resolvers),
+    schemaDirectives
   });
 };
 

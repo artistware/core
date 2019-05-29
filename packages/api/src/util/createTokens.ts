@@ -20,13 +20,8 @@ export default function createTokens({ id, count, roles }) {
     // noTimestamp?: boolean;
     // header?: object;
     // encoding?: string;
-    console.log('createTokens', id, count, roles);
-    if (!id && !count && !roles.length) {
-        return null;
-    }
-
     const { 
-        NBF_BUFFER,
+        // NBF_BUFFER,
         COOKIE_SETTINGS,
         refreshMaxAge,
         accessMaxAge

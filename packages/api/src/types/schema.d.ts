@@ -28,6 +28,12 @@ me: IUserJWT | null;
 interface IUserJWT {
 __typename: "UserJWT";
 sub: string;
+app_metadata: IAppMetadata | null;
+}
+
+interface IAppMetadata {
+__typename: "AppMetadata";
+roles: Array<string>;
 }
 
 interface IMutation {
@@ -52,6 +58,11 @@ __typename: "GenericPayload";
 path: string;
 message: string;
 success: boolean;
+}
+
+const enum Role {
+admin = 'admin',
+user = 'user'
 }
 
 interface IUser {
