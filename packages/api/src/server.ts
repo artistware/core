@@ -11,6 +11,8 @@ import devApolloLogging from './util/devApolloLogging';
 import * as session from 'express-session';
 import * as connectRedis from 'connect-redis';
 import { redis } from './util/createRedisConnection';
+import * as helmet from 'helmet';
+const RateLimit = require('express-rate-limit');
 
 import keys from './config/keys';
 import SETTINGS, { _refreshMaxAge } from './config/settings';
@@ -42,6 +44,18 @@ const start = async ():Promise<e.Application> => {
     app.use(cors(ENV_BASED_CORS));
     app.set('development', isDev);
     app.use(cookieParser(COOKIE_SECRET));
+    app.use(helmet());
+
+    // Consider using a different store, than the default
+    app.use(RateLimit({
+        windowMs: 5 * 60 * 1000, // 5 minutes
+        max: 150,
+        statusCode: 429,
+        message: 'Requests sent to this server must not exceed 150 in under 5 mins',
+        handler: (req, res) => {
+            return res.status(429).send({message: 'Requests sent to this server must not exceed 150 in under 5 mins', success: false, path: 'root'});
+        }
+    }));
 
     app.use(
         session({
@@ -66,7 +80,6 @@ const start = async ():Promise<e.Application> => {
     app.use(setRequestUser(redis));
 
     const schema = genSchema() as any;
-    // TODO throttling
 
     const apollo = new ApolloServer({
         schema,
@@ -82,7 +95,7 @@ const start = async ():Promise<e.Application> => {
         }
     });
     apollo.applyMiddleware({app});
-    await createConnection(ENV_BASED_RESET);
+    await createConnection(ENV_BASED_RESET); // TODO ENSURE Dev to Prod settings
 
     console.log(`db connected, reset = ${ENV_BASED_RESET}`);
 
