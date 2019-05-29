@@ -1,7 +1,6 @@
 import * as yup from 'yup';
 import e from 'express';
 import { Redis } from 'ioredis';
-import session from 'express-session';
 import { SessionState } from 'http2';
 
 export type YupNum = [number, yup.TestOptionsMessage];

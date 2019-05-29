@@ -6,7 +6,7 @@ import createConnection from './util/createConnection';
 import * as cors from 'cors';
 import * as cookieParser from 'cookie-parser';
 import setRequestUser from './util/setRequestUser';
-import { AuthenticatedRequest } from './types/types.common';
+import { Context } from './types/types.common';
 import devApolloLogging from './util/devApolloLogging';
 import * as session from 'express-session';
 import * as connectRedis from 'connect-redis';
@@ -67,12 +67,11 @@ const start = async ():Promise<e.Application> => {
 
     const schema = genSchema() as any;
     // TODO throttling
-    // TODO redis 15 min cache access
 
     const apollo = new ApolloServer({
         schema,
-        context: async (ctx: { req: AuthenticatedRequest, res: e.Response }) => {
-            isDev ? devApolloLogging : (() => null)();
+        context: async (ctx: Context) => {
+            isDev ? devApolloLogging(ctx) : (() => null)();
             return {
                 isAuthenticated: !!(ctx.req.user && ctx.req.user.sub),  // it could be a directive resolver.  this is just t/f
                 req: ctx.req,

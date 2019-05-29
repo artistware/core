@@ -39,6 +39,7 @@ roles: Array<string>;
 interface IMutation {
 __typename: "Mutation";
 login: IGenericPayload;
+logout: IGenericPayload;
 register: IGenericPayload;
 }
 

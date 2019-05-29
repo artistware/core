@@ -40,6 +40,7 @@ export default function setRequestUser (redis: Redis) {
 
         // HERE you can check the id against redis.  If redis is alive skip the db lookup
         const rsess = await redis.get(`${REDIS_SESSION_PF}${_id}`);
+        console.log('rsess', rsess);
         if (!rsess) {
             // check the user and populate the tokens with user data
             const u = await User.findOne({
