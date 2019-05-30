@@ -14,7 +14,6 @@ const {
     DB_RESET,
     LISTENING_PORT,
     DOMAIN,
-    REDIS_DB,
     REDIS_HOST,
     REDIS_PASSWORD,
     REDIS_PORT

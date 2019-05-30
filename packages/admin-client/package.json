@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brandon Morrison <brandon@brandonam.com> (http://brandonam.com)",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "react": "^16.8.6",
     "react-redux": "^7.0.3",

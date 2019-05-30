@@ -23,8 +23,7 @@ const {
     ENV_BASED_CORS,
     ENV_BASED_RESET,
     isDev,
-    REDIS_SETTINGS,
-    
+    REDIS_SETTINGS
 } = SETTINGS;
 
 const {

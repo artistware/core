@@ -34,6 +34,9 @@ const schema = yup.object().shape({
         .max(...passwordLong)
 });
 
+// TODO confirm by email
+// TODO reset password
+
 export const resolvers: ResolverMap = {
     Mutation: {
         register: async (

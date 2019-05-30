@@ -16,7 +16,7 @@
     "gen:schema": "ts-node src/util/createTypes.ts"
   },
   "author": "Brandon Morrison <brandon@brandonam.com> (http://brandonam.com)",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "@gql2ts/from-schema": "^1.8.0",
     "@types/connect-redis": "^0.0.10",

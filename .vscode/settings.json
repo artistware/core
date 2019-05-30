@@ -11,6 +11,7 @@
     "**/yarn.lock": true,
     "**/package-lock.json": true,
     "**/.gitkeep": true,
-    "**/.env": true
+    "**/.env": true,
+    "**/tslint.json": true
   }
 }
