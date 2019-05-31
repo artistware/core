@@ -32,15 +32,29 @@ const CORS:cors.CorsOptions = {
         }
     },
     methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],
-    preflightContinue: true,
-    optionsSuccessStatus: 200
+    preflightContinue: false,
+    optionsSuccessStatus: 200,
+    credentials: true,
+    maxAge: 600
 };
 
+const whitelist = ['http://localhost:4000', 'http://localhost:3000'];
 const CORS_DEV:cors.CorsOptions = {
-    origin: _isDev ? true : false,
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+            console.log('whitelisted');
+            callback(null, true)
+        } else {
+            console.log(origin);
+            console.log('rejected');
+            callback(new Error('Not allowed by CORS'))
+        }
+    },
     methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],
-    preflightContinue: true,
-    optionsSuccessStatus: 200
+    preflightContinue: false, // true = next() ... but this is the final handler on this srvr
+    optionsSuccessStatus: 200,
+    credentials: true,
+    maxAge: 600
 };
 
 

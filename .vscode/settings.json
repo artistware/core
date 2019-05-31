@@ -12,6 +12,9 @@
     "**/package-lock.json": true,
     "**/.gitkeep": true,
     "**/.env": true,
-    "**/tslint.json": true
+    "**/tslint.json": true,
+    "packages/public-client/build": true,
+    "packages/admin-client/build": true,
+    "dump.rdb": true
   }
 }

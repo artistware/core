@@ -12,6 +12,7 @@ import * as session from 'express-session';
 import * as connectRedis from 'connect-redis';
 import { redis } from './util/createRedisConnection';
 import * as helmet from 'helmet';
+import * as bodyParser from 'body-parser';
 const RateLimit = require('express-rate-limit');
 
 import keys from './config/keys';
@@ -40,10 +41,14 @@ const start = async ():Promise<e.Application> => {
  
     app.set('trust proxy', 1);
     app.set('LISTENING_PORT', PORT);
-    app.use(cors(ENV_BASED_CORS));
     app.set('development', isDev);
     app.use(cookieParser(COOKIE_SECRET));
     app.use(helmet());
+    app.use((_, res, next) => {
+        res.append('Access-Control-Allow-Credentials', 'true');
+        return next();
+    });
+    // app.use(bodyParser.text({ type: 'application/graphql' }));
 
     // Consider using a different store, than the default
     app.use(RateLimit({
@@ -82,6 +87,7 @@ const start = async ():Promise<e.Application> => {
 
     const apollo = new ApolloServer({
         schema,
+        playground: true,
         context: async (ctx: Context) => {
             isDev ? devApolloLogging(ctx) : (() => null)();
             return {
@@ -93,7 +99,9 @@ const start = async ():Promise<e.Application> => {
             }
         }
     });
-    apollo.applyMiddleware({app});
+
+    apollo.applyMiddleware({app, cors: ENV_BASED_CORS});
+    // console.log(app._router);
     await createConnection(ENV_BASED_RESET); // TODO ENSURE Dev to Prod settings
 
     console.log(`db connected, reset = ${ENV_BASED_RESET}`);
