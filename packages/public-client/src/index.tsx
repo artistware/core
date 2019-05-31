@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { createStore, combineReducers, compose, bindActionCreators } from 'redux';
 import { Provider } from 'react-redux';
 // import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -29,32 +29,47 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
         link,
         cache: new InMemoryCache()
     });
+    
 
-    // function repositoryReducer(state, action) {
-    //     switch (action.type) {
-    //       case 'TOGGLE_SELECT_REPOSITORY': {
-    //         return applyToggleSelectRepository(state, action);
-    //       }
-    //       default:
-    //         return state;
-    //     }
-    //   }
+    // TODO all payloads should be typescript assured
+    function userReducer(state = { isAuth: false, info: null }, action: { type:string, payload?: any }) {
+        switch (action.type) {
+            case 'USER_IDENTITY_LOGIN':
+                return { ...state, isAuth: true }; // successful login
+            case 'USER_IDENTITY_ME':
+                const { payload } = action;
+                return { isAuth: true, info: payload }; // successful me check
+            case 'USER_IDENTITY_LOGOUT':
+                return { isAuth: false, info: null };
+            default:
+                return state;
+        }
+    }
+
+    const userIdentityLogin = () => ({type: 'USER_IDENTITY_LOGIN'});
+    const userIdentityMe = (payload) => ({type: 'USER_IDENTITY_ME', payload});
+    const userIdentityLogout = () => ({type: 'USER_IDENTITY_LOGOUT'});
 
     const initialState = {};
-    // const store = createStore(
-    //     combineReducers({
-    //     //   todos: todoReducer,
-    //     //   users: userReducer,
-    //     //   apollo: client.reducer(),
-    //     }),
-    //     initialState, // initial state
-    //     compose(
-    //         (typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined') ? window.__REDUX_DEVTOOLS_EXTENSION__() : (() => null),
-    //     )
-    // );
+    const store = createStore(
+        combineReducers({
+            user: userReducer
+        }),
+        initialState, // initial state
+        compose(
+            (typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined') ? window.__REDUX_DEVTOOLS_EXTENSION__() : (() => null),
+        )
+    );
+
+    const userIdentity$ = bindActionCreators({
+        login: userIdentityLogin,
+        me: userIdentityMe,
+        logout: userIdentityLogout
+    }, store.dispatch);
+
     
     try {
-        const result = await client.mutate({
+        await client.mutate({
             mutation: gql`
                 mutation {
                     login(email: "brmorrison61@gmail.com", password: "password") {
@@ -65,8 +80,9 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
                 }
             `
         });
-        console.log(result);
+        userIdentity$.login();
     } catch (e) {
+        // TODO msging to toast a reducer
         console.log(e);
     }
     
@@ -80,6 +96,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
     }`;
     
     // TODO sharable types amongst packages
+    // TODO <Query... seems awful considering it should just receive props...  the QueryResult is the "props" in this situation
+    // let MeRenderCount = 0;
     const Me = () => (
         <Query
             query={meQuery}>
@@ -87,13 +105,12 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
                 ({ loading, error, data }: ReactApolloTypes.QueryResult) => {
                     if (loading) return <p>Loading...</p>;
                     if (error) return <p>Error :(</p>;
+                    
                     const { me } = data;
                     const { app_metadata } = me;
+                    userIdentity$.me(me);
                     return (
-                        <div>
-                            {me.sub} | 
-                            {app_metadata.roles.map((role:string, i:number) => (<p key={`role-${i}`}>{role}</p>))}
-                        </div>
+                        <h3>{me.sub} | {app_metadata.roles.map((role:string, i:number) => (<span key={`role-${i}`}>{role}</span>))}</h3>
                     );
                 }
             }
@@ -102,9 +119,9 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
     
     const ROOT = () => (
         <ApolloProvider client={client}>
-            {/* <Provider store={}> */}
+            <Provider store={store}>
                 <Me/>
-            {/* </Provider> */}
+            </Provider>
         </ApolloProvider>
     );
     
