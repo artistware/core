@@ -25,7 +25,7 @@
     "@types/ioredis": "^4.0.11",
     "@types/redis": "^2.8.13",
     "apollo-server": "^2.5.0",
-    "apollo-server-express": "^2.5.0",
+    "apollo-server-express": "^2.14.2",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "compose-then": "^1.0.1",
