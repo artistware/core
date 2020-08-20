@@ -26,7 +26,7 @@
     "@types/redis": "^2.8.13",
     "apollo-server": "^2.5.0",
     "apollo-server-express": "^2.5.0",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "compose-then": "^1.0.1",
     "connect-redis": "^3.4.1",
